@@ -1,0 +1,48 @@
+version: "3.8"
+
+
+services:
+  go_rest_comments_api_db:
+    image: postgres:12.2-alpine
+    container_name: "go-rest-comments-api-db"
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    networks:
+      - go_rest_comments_network
+    volumes:
+      - database_postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  go_rest_comments_api:
+    build: .
+    container_name: "go-rest-comments-api"
+    environment:
+      DB_USERNAME: "postgres"
+      DB_PASSWORD: "postgres"
+      DB_DB: "postgres"
+      DB_HOST: "go_rest_comments_api_db"
+      DB_TABLE: "postgres"
+      DB_PORT: "5432"
+      SSL_MODE: "disable"
+    ports:
+      - "8080:8080"
+    depends_on:
+      go_rest_comments_api_db:
+        condition: service_healthy
+    networks:
+      - go_rest_comments_network
+
+volumes:
+  database_postgres:
+
+networks:
+  go_rest_comments_network:
+    driver: bridge
