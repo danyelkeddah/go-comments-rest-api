@@ -26,6 +26,7 @@ func convertCommentRowToComment(c CommentRow) comment.Comment {
 
 func (d *Database) GetComment(ctx context.Context, uuid string) (comment.Comment, error) {
 	var cmtRow CommentRow
+
 	row := d.Client.QueryRowContext(
 		ctx,
 		`SELECT id, slug, body, author FROM comments WHERE id = $1`,

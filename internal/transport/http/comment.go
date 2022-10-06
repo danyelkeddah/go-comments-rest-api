@@ -7,7 +7,6 @@ import (
 	"github.com/gorilla/mux"
 	"log"
 	"net/http"
-	"net/mail"
 )
 
 type CommentService interface {
@@ -99,7 +98,7 @@ func (h *Handler) DeleteComment(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if err := json.NewEncoder(w).Encode(Response{mail.Message{}: "Successfully deleted"}) {
+	if err := json.NewEncoder(w).Encode(Response{Message: "Successfully deleted"}); err != nil {
 		panic(err)
 	}
 }
