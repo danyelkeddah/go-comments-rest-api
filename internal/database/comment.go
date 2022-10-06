@@ -93,8 +93,8 @@ func (d *Database) UpdateComment(ctx context.Context, id string, cmt comment.Com
 		ctx,
 		`UPDATE comments SET
                     slug = :slug,
-					author := author,
-                	body := body
+					author = :author,
+                	body = :body
                 WHERE id = :id`,
 		rowComment,
 	)
